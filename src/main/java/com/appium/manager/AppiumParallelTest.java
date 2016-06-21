@@ -3,6 +3,7 @@ package com.appium.manager;
 import com.annotation.values.SkipIf;
 import com.appium.ios.IOSDeviceConfiguration;
 import com.appium.utils.ImageUtils;
+import com.appium.utils.ImageDecoding;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.report.factory.ExtentManager;
@@ -29,7 +30,9 @@ import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.TestListenerAdapter;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
@@ -251,23 +254,22 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
                         .getMethodName() + "/" + screenShotNameWithTimeStamp + deviceModel
                         + "_failed_" + result.getMethod().getMethodName() + "_framed.png");
                 if (framedImageAndroid.exists()) {
+                    String imgstr = getImageEncodeString(framedImageAndroid);
                     ExtentTestManager.getTest()
                         .log(LogStatus.INFO, result.getMethod().getMethodName(),
-                            "Snapshot below: " + ExtentTestManager.getTest().addScreenCapture(
-                                System.getProperty("user.dir") + "/target/screenshot/android/"
-                                    + device_udid.replaceAll("\\W", "_") + "/" + className + "/"
-                                    + result.getMethod().getMethodName() + "/"
-                                    + screenShotNameWithTimeStamp + deviceModel + "_failed_"
-                                    + result.getMethod().getMethodName() + "_framed.png"));
+                            "Snapshot below: " + ExtentTestManager.getTest()
+                                .addBase64ScreenShot("data:image/png;base64,"+imgstr));
                 } else {
+                    File unframedImage = new File(
+                        System.getProperty("user.dir") + "/target/screenshot/android/" + device_udid
+                            .replaceAll("\\W", "_") + "/" + className + "/" + result.getMethod()
+                            .getMethodName() + "/" + screenShotNameWithTimeStamp + deviceModel + "_"
+                            + result.getMethod().getMethodName() + "_failed.png");
+                    String imgstr = getImageEncodeString(unframedImage);
                     ExtentTestManager.getTest()
                         .log(LogStatus.INFO, result.getMethod().getMethodName(),
-                            "Snapshot below: " + ExtentTestManager.getTest().addScreenCapture(
-                                System.getProperty("user.dir") + "/target/screenshot/android/"
-                                    + device_udid.replaceAll("\\W", "_") + "/" + className + "/"
-                                    + result.getMethod().getMethodName() + "/"
-                                    + screenShotNameWithTimeStamp + deviceModel + "_" + result
-                                    .getMethod().getMethodName() + "_failed.png"));
+                            "Snapshot below: " + ExtentTestManager.getTest()
+                                .addBase64ScreenShot("data:image/png;base64,"+imgstr));
                 }
 
 
@@ -279,23 +281,22 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
                         .getMethodName() + "/" + screenShotNameWithTimeStamp + deviceModel
                         + "_failed_" + result.getMethod().getMethodName() + "_framed.png");
                 if (framedImageIOS.exists()) {
+                    String framedIOS = getImageEncodeString(framedImageIOS);
                     ExtentTestManager.getTest()
                         .log(LogStatus.INFO, result.getMethod().getMethodName(),
-                            "Snapshot below: " + ExtentTestManager.getTest().addScreenCapture(
-                                System.getProperty("user.dir") + "/target/screenshot/iOS/"
-                                    + device_udid.replaceAll("\\W", "_") + "/" + className + "/"
-                                    + result.getMethod().getMethodName() + "/"
-                                    + screenShotNameWithTimeStamp + deviceModel + "_failed_"
-                                    + result.getMethod().getMethodName() + "_framed.png"));
+                            "Snapshot below: " + ExtentTestManager.getTest()
+                                .addBase64ScreenShot(framedIOS));
                 } else {
+                    File unframedIOS = new File(
+                        System.getProperty("user.dir") + "/target/screenshot/iOS/" + device_udid
+                            .replaceAll("\\W", "_") + "/" + className + "/" + result.getMethod()
+                            .getMethodName() + "/" + screenShotNameWithTimeStamp + deviceModel + "_"
+                            + result.getMethod().getMethodName() + "_failed.png");
+                    String unFramedIOSString=getImageEncodeString(unframedIOS);
                     ExtentTestManager.getTest()
                         .log(LogStatus.INFO, result.getMethod().getMethodName(),
-                            "Snapshot below: " + ExtentTestManager.getTest().addScreenCapture(
-                                System.getProperty("user.dir") + "/target/screenshot/iOS/"
-                                    + device_udid.replaceAll("\\W", "_") + "/" + className + "/"
-                                    + result.getMethod().getMethodName() + "/"
-                                    + screenShotNameWithTimeStamp + deviceModel + "_" + result
-                                    .getMethod().getMethodName() + "_failed.png"));
+                            "Snapshot below: " + ExtentTestManager.getTest()
+                                .addBase64ScreenShot(unFramedIOSString));
                 }
 
             }
@@ -311,12 +312,18 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
                 System.out.println(driver.getSessionId() + ": Saving device log - Done.");
             }
 
-        }
-        if (result.getStatus() == ITestResult.SKIP) {
+        } if (result.getStatus() == ITestResult.SKIP) {
             ExtentTestManager.getTest().log(LogStatus.SKIP, "Test skipped");
         }
         parentContext.get(Thread.currentThread().getId()).appendChild(child);
         ExtentManager.getInstance().flush();
+    }
+
+    public String getImageEncodeString(File framedImageAndroid) throws IOException {
+        BufferedImage img = ImageIO.read(framedImageAndroid);
+        String imgstr;
+        imgstr = ImageDecoding.encodeToString(img, "png");
+        return imgstr;
     }
 
     public synchronized void killAppiumServer() throws InterruptedException, IOException {
