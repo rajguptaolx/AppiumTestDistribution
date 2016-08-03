@@ -2,14 +2,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.saikrishna321</groupId>
+    <groupId>com.github.rajguptaolx</groupId>
     <artifactId>AppiumTestDistribution</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>AppiumTestDistribution</name>
     <description>"A tool run Android and iOS test in parallel across devices"</description>
-    <url>https://github.com/saikrishna321/AppiumTestDistribution</url>
+    <url>https://github.com/rajguptaolx/AppiumTestDistribution</url>
 
     <licenses>
         <license>
@@ -19,23 +19,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/saikrishna321/AppiumTestDistribution.git</url>
-        <connection>scm:git:git@github.com:saikrishna321/AppiumTestDistribution.git</connection>
+        <url>https://github.com/rajguptaolx/AppiumTestDistribution.git</url>
+        <connection>scm:git:git@github.com:rajguptaolx/AppiumTestDistribution.git</connection>
     </scm>
-
-    <developers>
-        <developer>
-            <name>Sai Krishna</name>
-            <email>saikrishna321@yahoo.com</email>
-            <roles>
-                <role>owner</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Srinivasan Sekar</name>
-            <email>srinivasan.sekar1990@gmail.com</email>
-        </developer>
-    </developers>
 
 
     <repositories>
