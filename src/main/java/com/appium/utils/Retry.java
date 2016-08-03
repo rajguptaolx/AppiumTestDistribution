@@ -13,6 +13,7 @@ public class Retry implements IRetryAnalyzer {
     private int retryCount = 0;
     private int maxRetryCount;
     public static Properties prop = new Properties();
+    private static int isRetryable = 0;
 
     public boolean retry(ITestResult result) {
         try {
@@ -40,16 +41,23 @@ public class Retry implements IRetryAnalyzer {
             System.out.println("Test Failed");
             if (retryCount == maxRetryCount) {
                 System.out.println("Log report");
+                isRetryable = 0;
             }
             if (retryCount < maxRetryCount) {
                 retryCount++;
                 System.out.println(
                     "Retrying Failed Test Cases " + retryCount + "out of " + maxRetryCount);
+                isRetryable = 1;
                 return true;
 
             }
         }
 
         return false;
+    }
+
+
+    public synchronized static int isRetryable() {
+        return isRetryable;
     }
 }

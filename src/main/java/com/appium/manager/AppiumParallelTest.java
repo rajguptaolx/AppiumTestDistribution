@@ -3,6 +3,7 @@ package com.appium.manager;
 import com.annotation.values.SkipIf;
 import com.appium.ios.IOSDeviceConfiguration;
 import com.appium.utils.ImageUtils;
+import com.appium.utils.Retry;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.report.factory.ExtentManager;
@@ -57,6 +58,7 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
     public String deviceModel;
     public File scrFile = null;
     String screenShotNameWithTimeStamp;
+    public boolean isAppend=true;
 
     private Map<Long, ExtentTest> parentContext = new HashMap<Long, ExtentTest>();
     private static ArrayList<String> devices = new ArrayList<String>();
@@ -163,8 +165,14 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
         throws Exception {
         ExtentTestManager.loadConfig();
         if (prop.getProperty("FRAMEWORK").equalsIgnoreCase("testng")) {
-            child = ExtentTestManager.startTest(methodName.toString())
-                .assignCategory(category + "_" + device_udid.replaceAll("\\W", "_"));
+            if (Retry.isRetryable() == 0) {
+                child = ExtentTestManager.startTest(methodName.toString())
+                        .assignCategory(category + "_" + device_udid.replaceAll("\\W", "_"));
+                isAppend=true;
+            } else {
+                child = ExtentTestManager.getTest();
+                isAppend=false;
+            }
         }
         Thread.sleep(3000);
         startingServerInstance();
@@ -395,8 +403,11 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
         if (result.getStatus() == ITestResult.SKIP) {
             ExtentTestManager.getTest().log(LogStatus.SKIP, "Test skipped");
         }
-        parentContext.get(Thread.currentThread().getId()).appendChild(child);
-        ExtentManager.getInstance().flush();
+
+        if(isAppend) {
+            parentContext.get(Thread.currentThread().getId()).appendChild(child);
+            ExtentManager.getInstance().flush();
+        }
     }
 
     public synchronized void killAppiumServer() throws InterruptedException, IOException {
@@ -450,7 +461,7 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
         androidCapabilities.setCapability("browserName", "");
         checkSelendroid(androidCapabilities);
         androidCapabilities
-            .setCapability(MobileCapabilityType.APP, prop.getProperty("ANDROID_APP_PATH"));
+            .setCapability(MobileCapabilityType.APP,  System.getProperty("user.dir") + prop.getProperty("ANDROID_APP_PATH"));
         androidCapabilities.setCapability(MobileCapabilityType.UDID, device_udid);
         return androidCapabilities;
     }
