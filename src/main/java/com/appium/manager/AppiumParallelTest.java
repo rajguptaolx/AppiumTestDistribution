@@ -302,7 +302,6 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
             break;
         }
 
-
         if (result.isSuccess()) {
             ExtentTestManager.getTest()
                 .log(LogStatus.PASS, result.getMethod().getMethodName(), "Pass");
@@ -401,10 +400,13 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
 
         }
         if (result.getStatus() == ITestResult.SKIP) {
+            if(Retry.isRetryable()==1)
+                ExtentTestManager.getTest().log(LogStatus.UNKNOWN, result.getMethod().getMethodName(), "unknown");
+            else
             ExtentTestManager.getTest().log(LogStatus.SKIP, "Test skipped");
         }
 
-        if(isAppend) {
+        if( (Retry.isRetryable()==1 && result.getStatus() != ITestResult.SKIP) || Retry.isRetryable()==0) {
             parentContext.get(Thread.currentThread().getId()).appendChild(child);
             ExtentManager.getInstance().flush();
         }
