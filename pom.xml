@@ -2,14 +2,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.rajguptaolx</groupId>
+    <groupId>com.github.saikrishna321</groupId>
     <artifactId>AppiumTestDistribution</artifactId>
-    <version>v0.0.2</version>
+    <version>6.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>AppiumTestDistribution</name>
     <description>"A tool run Android and iOS test in parallel across devices"</description>
-    <url>https://github.com/rajguptaolx/AppiumTestDistribution</url>
+    <url>https://github.com/saikrishna321/AppiumTestDistribution</url>
 
     <licenses>
         <license>
@@ -19,9 +19,23 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/rajguptaolx/AppiumTestDistribution.git</url>
-        <connection>scm:git:git@github.com:rajguptaolx/AppiumTestDistribution.git</connection>
+        <url>https://github.com/saikrishna321/AppiumTestDistribution.git</url>
+        <connection>scm:git:git@github.com:saikrishna321/AppiumTestDistribution.git</connection>
     </scm>
+
+    <developers>
+        <developer>
+            <name>Sai Krishna</name>
+            <email>saikrishna321@yahoo.com</email>
+            <roles>
+                <role>owner</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Srinivasan Sekar</name>
+            <email>srinivasan.sekar1990@gmail.com</email>
+        </developer>
+    </developers>
 
 
     <repositories>
@@ -38,7 +52,12 @@
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.saikrishna321</groupId>
+            <artifactId>cucumber-jvm-parallel-plugin</artifactId>
+            <version>2.0.9</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -71,9 +90,9 @@
             <version>2.1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.relevantcodes</groupId>
+            <groupId>com.aventstack</groupId>
             <artifactId>extentreports</artifactId>
-            <version>2.41.1</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
