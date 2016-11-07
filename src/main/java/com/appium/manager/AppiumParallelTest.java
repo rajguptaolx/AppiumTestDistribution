@@ -588,8 +588,9 @@ public class AppiumParallelTest extends TestListenerAdapter implements ITestList
             prop.getProperty("APP_PACKAGE"));
         androidCapabilities.setCapability("browserName", "");
         checkSelendroid(androidCapabilities);
+        String APP_PATH = System.getProperty("user.dir") + prop.getProperty("ANDROID_APP_PATH");
         androidCapabilities
-            .setCapability(MobileCapabilityType.APP, prop.getProperty("ANDROID_APP_PATH"));
+            .setCapability(MobileCapabilityType.APP, APP_PATH);
         androidCapabilities.setCapability(MobileCapabilityType.UDID, device_udid);
         return androidCapabilities;
     }
